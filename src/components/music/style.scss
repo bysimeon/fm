@@ -1,0 +1,123 @@
+@import "../../variables.scss";
+
+.container--music {
+    margin: 2em 3em 0em 3em;
+    overflow: hidden;
+    .medmedtext--music {
+        margin-bottom: 0.7rem;
+    }
+    .notsmalltext--music {
+        margin: 0 0 1rem 1rem;
+        line-height: 1.5em;
+    }
+    .user-info {
+        padding: 1rem;
+        font-size: 2rem;
+    }
+    .music {
+        display: grid;
+        grid-template-columns: repeat(3, 3fr);
+        margin-bottom: 0.35rem;
+        grid-gap: 0.25em;
+        &__column {
+            &::-webkit-scrollbar { width: 0 !important }
+            height: calc(0.8 * (100vh - 13rem));
+            min-height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-bottom: 2px solid;
+            &__item {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding: 0.5em;
+                margin: 0.25em 0;
+                border: solid 2px;
+                cursor: pointer;
+                &__title {
+                    font-size: 1em;
+                    width: 85%;
+                }
+                &__plays {
+                    &:first-child {
+                        @media screen and (max-width: 430px) {
+                            display: none;
+                        }
+                    }
+                    @media screen and (max-width: 430px) {
+                    }
+                    float: right;
+                    font-size: 1em;
+                    line-height: 1em;
+                }
+                &:first-child {
+                    font-weight: bold;
+                    position: sticky;
+                    top: 0;
+                    background: $text-color;
+                    border-color: $text-color;
+                    color: $background-color;
+                    margin-top: 0;
+                    .music__column__item__title {
+                        width: 50%;
+                        color: $background-color;
+                    }
+                }
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                &--hovered {
+                    background: rgba($color: $text-color, $alpha: 0.20);
+                }
+                &--selected {
+                    background: rgba($color: $text-color, $alpha: 0.15);
+                    border-left-width: 15px;
+                }
+                transition: background 250ms linear;
+                @media screen and (max-width: 520px) {
+                    .music__column__item__title {
+                        width: 100%;
+                        margin-bottom: 0.25em;
+                    }
+                    .music__column__item__plays {
+                        width: 100%;
+                        padding-top: 0.25em;
+                        // border-top: 1px solid #000;
+                        text-align: right;
+                    }
+                }
+            }
+            &--recent {
+                height: calc(0.25* (100vh - (13.75rem + 14vw)));
+                min-height: 300px;
+            }
+            &--totals {
+                height: calc(0.25 * (100vh - (13.75rem + 14vw)));
+                min-height: 300px;
+                // border-bottom: 0
+            }
+        }
+        &--recent {
+            grid-template-columns: 2fr 0.997fr;
+            margin-bottom: 1.5vh;
+        }
+    }
+
+    .dropdown--music {
+        font-size: 1em;
+        font-weight: normal;
+        background: $background-color;
+        padding: 0.1em 0.2em;
+        border: solid 2px;
+        border-radius: 0;
+        text-align: center;
+        text-align-last: center;
+        option {
+            text-align: left;
+        }
+        &:focus {
+            outline-offset: -2px;
+            outline-color: $background-color;
+        }
+    }
+}
