@@ -306,25 +306,32 @@ class Music extends Component {
 
         return (
             <div className="container container--music">
-                <div className="user-info">{this.state.userInfo ? (
-                    <span>
-                        {this.state.userInfo.user.playcount
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                    </span>
-                ) : (
-                        <span>000,000</span>
-                    )}{" "}
+                <h1 className="medmedtext medmedtext--music"> listened to: </h1>
 
+                <p className="notsmalltext notsmalltext--music">
+                    i've been tracking the music i listen to since 2015. since
+                    then i've listened to around{" "}
                     {this.state.userInfo ? (
                         <span>
-                            <a href={this.state.userInfo.user.url}> {this.state.userInfo.user.name} </a>{" "}
+                            {this.state.userInfo.user.playcount
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                        </span>
+                    ) : (
+                            <span>000,000</span>
+                        )}{" "}
+                    songs, all tracked through{" "}
+                    {this.state.userInfo ? (
+                        <span>
+                            <a href={this.state.userInfo.user.url}> last.fm </a>{" "}
                         </span>
                     ) : (
                             <span>
                                 <a href="https://www.last.fm/"> last.fm </a>{" "}
                             </span>
                         )}
+                    . here's a breakdown of what i've been listening to for the
+                    past{" "}
                     <select
                         value={this.state.timespan}
                         onChange={this.updateTimespan}
@@ -336,8 +343,13 @@ class Music extends Component {
                         <option>180</option>
                         <option>365</option>
                         <option>???</option>
-                    </select>
-</div>
+                    </select>{" "}
+                    days.
+                </p>
+                <p className="notsmalltext notsmalltext--music">
+                    note: currently using an modified ipod classic, so live
+                    music tracking is less frequent.
+                </p>
                     
                 <div className="music">
                     <div className="artists music__column">
