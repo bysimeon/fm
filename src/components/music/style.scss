@@ -150,3 +150,11 @@
         }
     }
 }
+
+.loading {
+    font-size: 3em;
+    text-align: center;
+    padding: calc(0.4 * (100vh - 13rem)) 0;
+    border: 2px solid var(--text-color);
+    height: calc(0.89 * (100vh - 13rem));
+}

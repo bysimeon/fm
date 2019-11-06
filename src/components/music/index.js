@@ -182,24 +182,6 @@ class Music extends Component {
         })
     }
 
-    componentDidMount() {
-        let recentInterval = setInterval(() => {
-            if (this.props.topArtists) {
-                this.setState({
-                    topArtists: this.props.topArtists,
-                    topTracks: this.props.topTracks,
-                    topAlbums: this.props.topAlbums,
-                    recentTracks: this.props.recentTracks,
-                    userInfo: this.props.userInfo,
-                    timespan: this.props.timespan
-                })
-            }
-        }, 80)
-        this.setState({
-            setInterval: recentInterval
-        })
-    }
-
     componentWillUnmount() {
         clearInterval(this.state.setInterval)
     }
@@ -354,7 +336,8 @@ class Music extends Component {
                 <p className="notsmalltext notsmalltext--music">
                     note: check out your account by typing in your username above!
                 </p>
-                    
+                
+                {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
                 <div className="music">
                     <div className="artists music__column">
                         <div className="music__column__item">
@@ -390,6 +373,8 @@ class Music extends Component {
                         {tracks}
                     </div>
                 </div>
+                ) : (<div/>)}
+                {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
                 <div className="music music--recent">
                     <div className="songs music__column music__column--recent">
                         <div className="music__column__item">
@@ -403,9 +388,6 @@ class Music extends Component {
                         </div>
                         {recents}
                     </div>
-                    {this.state.topArtists &&
-                        this.state.topAlbums &&
-                        this.state.topTracks && (
                             <div className="songs music__column music__column--totals">
                                 <div className="music__column__item">
                                     {this.state.timespan} day total
@@ -455,8 +437,12 @@ class Music extends Component {
                                     </div>
                                 </div>
                             </div>
-                        )}
                 </div>
+                ) : (
+                <div className="loading">
+                    loading
+                </div>
+                )}
             </div>
         )
     }
