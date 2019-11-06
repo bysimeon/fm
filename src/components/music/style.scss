@@ -1,9 +1,21 @@
-@import "../../variables.scss";
+:root {
+    --text-color: #000;
+    --background-color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #eee;
+        --background-color: #212121;
+    }
+}
 
 .user-input {
-    padding: .1em;
+    padding: .1em .2em;
     width: 100%;
-    border: 2px solid black;
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    background: var(--background-color);
 }
 
 .container--music {
@@ -60,26 +72,26 @@
                     font-weight: bold;
                     position: sticky;
                     top: 0;
-                    background: $text-color;
-                    border-color: $text-color;
-                    color: $background-color;
+                    background: var(--text-color);
+                    border-color: var(--text-color);
+                    color: var(--background-color);
                     margin-top: 0;
                     .music__column__item__title {
                         width: 50%;
-                        color: $background-color;
+                        color: var(--background-color);
                     }
                 }
                 &:last-child {
                     margin-bottom: 0;
                 }
                 &--hovered {
-                    background: rgba($color: $text-color, $alpha: 0.20);
+                    background: rgba($color: #000, $alpha: 0.15);
                 }
                 &--selected {
-                    background: rgba($color: $text-color, $alpha: 0.15);
+                    background: rgba($color: #000, $alpha: 0.25);
                     border-left-width: 15px;
                 }
-                transition: background 250ms linear;
+                transition: border-left 250ms linear, background-color 250ms linear;
                 @media screen and (max-width: 520px) {
                     .music__column__item__title {
                         width: 100%;
@@ -108,11 +120,22 @@
             margin-bottom: 1.5vh;
         }
     }
+    @media screen and (prefers-color-scheme: dark) {
+        .music__column__item {
+                    &--hovered {
+                    background: rgba($color: #fff, $alpha: 0.15);
+                    }
+                    &--selected {
+                        background: rgba($color: #fff, $alpha: 0.25);
+                        border-left-width: 15px;
+                    }
+                }
+            }
 
     .dropdown--music {
         font-size: 1em;
         font-weight: normal;
-        background: $background-color;
+        background: var(--background-color);
         padding: 0.1em 0.2em;
         border: solid 2px;
         border-radius: 0;
@@ -123,7 +146,7 @@
         }
         &:focus {
             outline-offset: -2px;
-            outline-color: $background-color;
+            outline-color: var(--background-color);
         }
     }
 }
