@@ -8,7 +8,6 @@ import Recent from "./recents"
 
 const apikey = process.env.REACT_APP_LASTFM_API_KEY
 const apibase = "https://ws.audioscrobbler.com/2.0/"
-const user = "theblindlookout"
 const timespanConvert = {
     "7": "7day",
     "30": "1month",
@@ -22,6 +21,7 @@ class Music extends Component {
     constructor() {
         super()
         this.state = {
+            user: "theblindlookout",
             limit: 50,
             timespan: "7",
             topArtists: null,
@@ -37,14 +37,16 @@ class Music extends Component {
         }
         this.selectArtist = this.selectArtist.bind(this)
         this.updateTimespan = this.updateTimespan.bind(this)
+        this.updateUser = this.updateUser.bind(this)
+        this.updateData = this.updateData.bind(this)
     }
 
-    updateTimespan(event) {
+    updateTimespan(e) {
         this.setState({
-            timespan: event.target.value
+            timespan: e.target.value
+        }, () => {
+            (this.updateData())
         })
-        console.log(event.target.value)
-        this.props.updateTimespan(event)
     }
 
     unixTimestamp(t) {
@@ -100,7 +102,7 @@ class Music extends Component {
             "?method=user." +
             request +
             "&user=" +
-            user +
+            this.state.user +
             "&period=" +
             timespanConvert[time] +
             "&limit=" +
@@ -147,23 +149,27 @@ class Music extends Component {
         xhr.send()
     }
 
+    updateUser(e) {
+        let username = e.target.value
+        if (username === "") {
+            username = "theblindlookout"
+        }
+        this.setState({
+            user: username
+        })
+        let timer = 0
+        setTimeout(this.updateData, 1000)
+    }
+
     updateData(time) {
         if (!time) {
             time = this.state.timespan
-            this.getJSON("getinfo", time)
         }
+        this.getJSON("getinfo", time)
         this.getJSON("getrecenttracks", time)
         this.getJSON("gettopartists", time)
         this.getJSON("gettoptracks", time)
         this.getJSON("gettopalbums", time)
-    }
-
-    updateTimespan(event) {
-        this.setState({
-            timespan: event.target.value
-        })
-        console.log(event.target.value)
-        this.updateData(event.target.value)
     }
 
     componentWillMount() {
@@ -306,11 +312,10 @@ class Music extends Component {
 
         return (
             <div className="container container--music">
-                <h1 className="medmedtext medmedtext--music"> listened to: </h1>
+                <input onKeyUp={this.updateUser} placeholder="theblindlookout"className="medmedtext medmedtext--music user-input"/>
 
                 <p className="notsmalltext notsmalltext--music">
-                    i've been tracking the music i listen to since 2015. since
-                    then i've listened to around{" "}
+                    has listened to around{" "}
                     {this.state.userInfo ? (
                         <span>
                             {this.state.userInfo.user.playcount
@@ -323,14 +328,14 @@ class Music extends Component {
                     songs, all tracked through{" "}
                     {this.state.userInfo ? (
                         <span>
-                            <a href={this.state.userInfo.user.url}> last.fm </a>{" "}
+                            <a href={this.state.userInfo.user.url}> last.fm </a>
                         </span>
                     ) : (
                             <span>
-                                <a href="https://www.last.fm/"> last.fm </a>{" "}
+                                <a href="https://www.last.fm/"> last.fm </a>
                             </span>
                         )}
-                    . here's a breakdown of what i've been listening to for the
+                    . here's a breakdown of what they've been listening to for the
                     past{" "}
                     <select
                         value={this.state.timespan}
@@ -347,8 +352,7 @@ class Music extends Component {
                     days.
                 </p>
                 <p className="notsmalltext notsmalltext--music">
-                    note: currently using an modified ipod classic, so live
-                    music tracking is less frequent.
+                    note: check out your account by typing in your username above!
                 </p>
                     
                 <div className="music">
