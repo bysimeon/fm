@@ -39,7 +39,7 @@
         grid-gap: 0.25em;
         &__column {
             &::-webkit-scrollbar { width: 0 !important }
-            height: calc(0.67 * (100vh - 13rem));
+            height: calc(0.65 * (100vh - 13rem));
             min-height: 500px;
             overflow-y: scroll;
             overflow-x: hidden;
@@ -106,11 +106,11 @@
                 }
             }
             &--recent {
-                height: calc(0.25* (100vh - (13.75rem + 14vw)));
+                height: calc(0.30* (100vh - (13.75rem + 14vw)));
                 min-height: 300px;
             }
             &--totals {
-                height: calc(0.25 * (100vh - (13.75rem + 14vw)));
+                height: calc(0.30 * (100vh - (13.75rem + 14vw)));
                 min-height: 300px;
                 // border-bottom: 0
             }
