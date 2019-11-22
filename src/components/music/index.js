@@ -5,6 +5,7 @@ import Artist from "./artists"
 import Album from "./albums"
 import Track from "./tracks"
 import Recent from "./recents"
+import { runInThisContext } from "vm"
 
 const apikey = process.env.REACT_APP_LASTFM_API_KEY
 const apibase = "https://ws.audioscrobbler.com/2.0/"
@@ -428,14 +429,14 @@ class Music extends Component {
                                         }
                                     </div>
                                 </div>
-                                <div className="music__column__item">
+                                {/* <div className="music__column__item">
                                     <div className="music__column__item__title">
                                         total tracks played
                                     </div>
                                     <div className="music__column__item__plays">
-                                        {trackplays}
+                                        {this.state.userInfo.user.playcount}
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                 </div>
                 ) : (
