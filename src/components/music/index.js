@@ -5,7 +5,6 @@ import Artist from "./artists"
 import Album from "./albums"
 import Track from "./tracks"
 import Recent from "./recents"
-import { runInThisContext } from "vm"
 
 const apikey = process.env.REACT_APP_LASTFM_API_KEY
 const apibase = "https://ws.audioscrobbler.com/2.0/"
@@ -95,7 +94,7 @@ class Music extends Component {
         })
     }
 
-    getJSON(request, time) {
+    getJSON(request, time, limit) {
         let xhr = new XMLHttpRequest()
         xhr.open(
             "GET",
@@ -107,7 +106,7 @@ class Music extends Component {
             "&period=" +
             timespanConvert[time] +
             "&limit=" +
-            this.state.limit +
+            limit +
             "&api_key=" +
             apikey +
             "&format=json"
@@ -166,17 +165,17 @@ class Music extends Component {
         if (!time) {
             time = this.state.timespan
         }
-        this.getJSON("getinfo", time)
-        this.getJSON("getrecenttracks", time)
-        this.getJSON("gettopartists", time)
-        this.getJSON("gettoptracks", time)
-        this.getJSON("gettopalbums", time)
+        this.getJSON("getinfo", time, "50")
+        this.getJSON("getrecenttracks", time, "1")
+        this.getJSON("gettopartists", time, "50")
+        this.getJSON("gettoptracks", time, "50")
+        this.getJSON("gettopalbums", time, "50")
     }
 
     componentWillMount() {
         this.updateData()
         let recentInterval = setInterval(() => {
-            this.getJSON("getrecenttracks", "30")
+            this.getJSON("getrecenttracks", "30", "1")
         }, 1000)
         this.setState({
             setInterval: recentInterval

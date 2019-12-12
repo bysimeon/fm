@@ -17,9 +17,8 @@ class Users extends Component {
         super()
         this.state = {
             user: "",
-            friends: null,
+            friends: false,
             added: []
-
         }
     }
 
@@ -29,7 +28,19 @@ class Users extends Component {
         })
     }
 
-    getJSON(request, time, user) {
+    currentTracks() {
+        if (this.state.friends) {
+        this.state.friends.forEach(friend => {
+            friend.recent = this.getJSON("getrecenttracks", friend.name, "1")
+        })
+    }
+}
+
+    updateFriends(user, recent) {
+        
+    }
+
+    getJSON(request, user, limit) {
         let xhr = new XMLHttpRequest()
         xhr.open(
             "GET",
@@ -40,7 +51,9 @@ class Users extends Component {
             user +
             "&api_key=" +
             apikey +
-            "&format=json"
+            "&limit=" + 
+            limit +
+            "&format=json" 
         )
         xhr.onload = () => {
             if (xhr.readyState === 4) {
@@ -52,13 +65,17 @@ class Users extends Component {
                             })
                             break
                         case "getrecenttracks":
-                            this.setState({
-                                recentTracks: JSON.parse(xhr.responseText)
-                            })
+                            this.updateFriends(user, JSON.parse(xhr.responseText))
                             break
                         case "getfriends":
+                            let raw = JSON.parse(xhr.responseText)
+                            let friends = []
+                            Object.entries(raw.friends).forEach(friend => {
+                                friends.push(friend[1][0])
+                            })
+                            friends.pop()
                             this.setState({
-                                recentTracks: JSON.parse(xhr.responseText)
+                                friends: friends
                             })
                             break
                         default:
@@ -71,13 +88,16 @@ class Users extends Component {
     }
 
     updateData() {
-        this.getJSON("getinfo")
+        this.getJSON("getinfo", user)
+        this.getJSON("getfriends", user)
     }
 
     componentWillMount() {
-        this.updateData()
+        this.setState({
+            user: user
+        }, this.updateData())
         let recentInterval = setInterval(() => {
-            this.getJSON("getrecenttracks", "30")
+           this.currentTracks()
         }, 1000)
         this.setState({
             setInterval: recentInterval
@@ -115,7 +135,9 @@ class Users extends Component {
 
         return (
            <section className="users">
-
+               <h1>
+                   debug: {this.state.user}
+               </h1>
            </section>
         )
     }
