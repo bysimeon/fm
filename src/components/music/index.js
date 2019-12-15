@@ -175,7 +175,7 @@ class Music extends Component {
     componentWillMount() {
         this.updateData()
         let recentInterval = setInterval(() => {
-            this.getJSON("getrecenttracks", "30", "1")
+            this.getJSON("getrecenttracks", "30", "50")
         }, 1000)
         this.setState({
             setInterval: recentInterval
