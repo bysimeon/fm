@@ -29,12 +29,12 @@ class Users extends Component {
     }
 
     currentTracks() {
-        if (this.state.friends) {
+    if (this.state.friends) {
         this.state.friends.forEach(friend => {
             friend.recent = this.getJSON("getrecenttracks", friend.name, "1")
         })
     }
-}
+    }
 
     updateFriends(user, recent) {
         
@@ -135,9 +135,9 @@ class Users extends Component {
 
         return (
            <section className="users">
-               <h1>
+               {/* <h1>
                    debug: {this.state.user}
-               </h1>
+               </h1> */}
            </section>
         )
     }

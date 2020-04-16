@@ -23,7 +23,7 @@ class Music extends Component {
         this.state = {
             user: "theblindlookout",
             limit: 50,
-            timespan: "7",
+            timespan: "30",
             topArtists: null,
             topTracks: null,
             topAlbums: null,
@@ -338,57 +338,20 @@ class Music extends Component {
                 </p>
                 
                 {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
-                <div className="music">
-                    <div className="artists music__column">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                top artists
+                    <div className="music music--recent">
+                        <div className="songs music__column music__column--recent">
+                            <div className="music__column__item">
+                                <div className="music__column__item__title">
+                                    recently played
                             </div>
-                            <div className="music__column__item__plays">
-                                plays
-                            </div>
-                        </div>
-                        {artists}
-                    </div>
-                    <div className="albums music__column">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                top albums
-                            </div>
-                            <div className="music__column__item__plays">
-                                plays
-                            </div>
-                        </div>
-                        {albums}
-                    </div>
-                    <div className="songs music__column">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                top tracks
-                            </div>
-                            <div className="music__column__item__plays">
-                                plays
-                            </div>
-                        </div>
-                        {tracks}
-                    </div>
-                </div>
-                ) : (<div/>)}
-                {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
-                <div className="music music--recent">
-                    <div className="songs music__column music__column--recent">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                recently played
-                            </div>
-                            <div className="music__column__item__plays">
-                                {" "}
+                                <div className="music__column__item__plays">
+                                    {" "}
                                 when
                             </div>
+                            </div>
+                            {recents}
                         </div>
-                        {recents}
-                    </div>
-                            <div className="songs music__column music__column--totals">
+                        {/* <div className="songs music__column music__column--totals">
                                 <div className="music__column__item">
                                     {this.state.timespan} day total
                                 </div>
@@ -428,21 +391,59 @@ class Music extends Component {
                                         }
                                     </div>
                                 </div>
-                                {/* <div className="music__column__item">
+                                <div className="music__column__item">
                                     <div className="music__column__item__title">
                                         total tracks played
                                     </div>
                                     <div className="music__column__item__plays">
                                         {this.state.userInfo.user.playcount}
                                     </div>
-                                </div> */}
-                            </div>
-                </div>
+                                </div>
+                            </div> */}
+                    </div>
                 ) : (
-                <div className="loading">
-                    loading
+                        <div className="loading">
+                            loading
+                        </div>
+                    )}
+                    
+                {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
+                <div className="music">
+                    <div className="artists music__column">
+                        <div className="music__column__item">
+                            <div className="music__column__item__title">
+                                top artists
+                            </div>
+                            <div className="music__column__item__plays">
+                                plays
+                            </div>
+                        </div>
+                        {artists}
+                    </div>
+                    <div className="albums music__column">
+                        <div className="music__column__item">
+                            <div className="music__column__item__title">
+                                top albums
+                            </div>
+                            <div className="music__column__item__plays">
+                                plays
+                            </div>
+                        </div>
+                        {albums}
+                    </div>
+                    <div className="songs music__column">
+                        <div className="music__column__item">
+                            <div className="music__column__item__title">
+                                top tracks
+                            </div>
+                            <div className="music__column__item__plays">
+                                plays
+                            </div>
+                        </div>
+                        {tracks}
+                    </div>
                 </div>
-                )}
+                ) : (<div/>)}
             </div>
         )
     }

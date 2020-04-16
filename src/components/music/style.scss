@@ -106,8 +106,8 @@
                 }
             }
             &--recent {
-                height: calc(0.30* (100vh - (13.75rem + 14vw)));
-                min-height: 300px;
+                height: calc(0.25* (100vh - (13.75rem + 14vw)));
+                min-height: 200px;
             }
             &--totals {
                 height: calc(0.30 * (100vh - (13.75rem + 14vw)));
@@ -116,8 +116,8 @@
             }
         }
         &--recent {
-            grid-template-columns: 2fr 0.997fr;
-            margin-bottom: 1.5vh;
+            grid-template-columns: 1fr ;
+
         }
     }
     @media screen and (prefers-color-scheme: dark) {
