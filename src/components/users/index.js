@@ -30,6 +30,7 @@ class Users extends Component {
 
     currentTracks() {
     if (this.state.friends) {
+        console.log(this.state.friends)
         this.state.friends.forEach(friend => {
             friend.recent = this.getJSON("getrecenttracks", friend.name, "1")
         })
@@ -77,6 +78,7 @@ class Users extends Component {
                             this.setState({
                                 friends: friends
                             })
+                            console.log(friends)
                             break
                         default:
                             break
@@ -135,9 +137,9 @@ class Users extends Component {
 
         return (
            <section className="users">
-               {/* <h1>
-                   debug: {this.state.user}
-               </h1> */}
+               <h1>
+                   {/* debug: {this.state.user} */}
+                 </h1>
            </section>
         )
     }

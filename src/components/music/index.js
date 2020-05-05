@@ -21,7 +21,7 @@ class Music extends Component {
     constructor() {
         super()
         this.state = {
-            user: "theblindlookout",
+            user: "s_meon",
             limit: 50,
             timespan: "30",
             topArtists: null,
@@ -152,7 +152,7 @@ class Music extends Component {
     updateUser(e) {
         let username = e.target.value
         if (username === "") {
-            username = "theblindlookout"
+            username = "s_meon"
         }
         this.setState({
             user: username
@@ -294,7 +294,7 @@ class Music extends Component {
 
         return (
             <div className="container container--music">
-                <input onKeyUp={this.updateUser} placeholder="theblindlookout"className="medmedtext medmedtext--music user-input"/>
+                <input onKeyUp={this.updateUser} placeholder="s_meon"className="medmedtext medmedtext--music user-input"/>
 
                 <p className="notsmalltext notsmalltext--music">
                     has listened to around{" "}
