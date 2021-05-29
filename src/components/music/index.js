@@ -21,7 +21,7 @@ class Music extends Component {
     constructor() {
         super()
         this.state = {
-            user: "s_meon",
+            user: "dotdotdashdot",
             limit: 50,
             timespan: "30",
             topArtists: null,
@@ -94,7 +94,7 @@ class Music extends Component {
         })
     }
 
-    getJSON(request, time, limit) {
+    async getJSON(request, time, limit = 50, page = 1) {
         let xhr = new XMLHttpRequest()
         xhr.open(
             "GET",
@@ -152,13 +152,13 @@ class Music extends Component {
     updateUser(e) {
         let username = e.target.value
         if (username === "") {
-            username = "s_meon"
+            username = "dotdotdashdot"
         }
         this.setState({
             user: username
         })
         let timer = 0
-        setTimeout(this.updateData, 1000)
+        setTimeout(this.updateData, 10000)
     }
 
     updateData(time) {
@@ -294,8 +294,7 @@ class Music extends Component {
 
         return (
             <div className="container container--music">
-                <input onKeyUp={this.updateUser} placeholder="s_meon"className="medmedtext medmedtext--music user-input"/>
-
+                <input onKeyUp={this.updateUser} placeholder="site's creator" className="medmedtext medmedtext--music user-input" />
                 <p className="notsmalltext notsmalltext--music">
                     has listened to around{" "}
                     {this.state.userInfo ? (
@@ -305,18 +304,18 @@ class Music extends Component {
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
                         </span>
                     ) : (
-                            <span>000,000</span>
-                        )}{" "}
+                        <span>000,000</span>
+                    )}{" "}
                     songs, all tracked through{" "}
-                    {this.state.userInfo ? (
+                    {this.state.userInfo === false ? (
                         <span>
                             <a href={this.state.userInfo.user.url}> last.fm </a>
                         </span>
                     ) : (
-                            <span>
-                                <a href="https://www.last.fm/"> last.fm </a>
-                            </span>
-                        )}
+                        <span>
+                            <a href="https://www.last.fm/"> last.fm </a>
+                        </span>
+                    )}
                     . here's a breakdown of what they've been listening to for the
                     past{" "}
                     <select
@@ -336,7 +335,7 @@ class Music extends Component {
                 <p className="notsmalltext notsmalltext--music">
                     note: check out your account by typing in your username above!
                 </p>
-                
+
                 {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
                     <div className="music music--recent">
                         <div className="songs music__column music__column--recent">
@@ -402,48 +401,48 @@ class Music extends Component {
                             </div> */}
                     </div>
                 ) : (
-                        <div className="loading">
-                            loading
-                        </div>
-                    )}
-                    
+                    <div className="loading">
+                        loading
+                    </div>
+                )}
+
                 {artists.length >= 1 && albums.length >= 1 && tracks.length >= 1 && recents.length >= 1 ? (
-                <div className="music">
-                    <div className="artists music__column">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                top artists
+                    <div className="music">
+                        <div className="artists music__column">
+                            <div className="music__column__item">
+                                <div className="music__column__item__title">
+                                    top artists
                             </div>
-                            <div className="music__column__item__plays">
-                                plays
+                                <div className="music__column__item__plays">
+                                    plays
                             </div>
+                            </div>
+                            {artists}
                         </div>
-                        {artists}
-                    </div>
-                    <div className="albums music__column">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                top albums
+                        <div className="albums music__column">
+                            <div className="music__column__item">
+                                <div className="music__column__item__title">
+                                    top albums
                             </div>
-                            <div className="music__column__item__plays">
-                                plays
+                                <div className="music__column__item__plays">
+                                    plays
                             </div>
+                            </div>
+                            {albums}
                         </div>
-                        {albums}
-                    </div>
-                    <div className="songs music__column">
-                        <div className="music__column__item">
-                            <div className="music__column__item__title">
-                                top tracks
+                        <div className="songs music__column">
+                            <div className="music__column__item">
+                                <div className="music__column__item__title">
+                                    top tracks
                             </div>
-                            <div className="music__column__item__plays">
-                                plays
+                                <div className="music__column__item__plays">
+                                    plays
                             </div>
+                            </div>
+                            {tracks}
                         </div>
-                        {tracks}
                     </div>
-                </div>
-                ) : (<div/>)}
+                ) : (<div />)}
             </div>
         )
     }

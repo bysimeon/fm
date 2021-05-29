@@ -11,7 +11,7 @@
 }
 
 .user-input {
-    padding: .1em .2em;
+    padding: 0.1em 0.2em;
     width: 100%;
     border: 2px solid var(--text-color);
     color: var(--text-color);
@@ -38,7 +38,9 @@
         margin-bottom: 0.35rem;
         grid-gap: 0.25em;
         &__column {
-            &::-webkit-scrollbar { width: 0 !important }
+            &::-webkit-scrollbar {
+                width: 0 !important;
+            }
             height: calc(0.7 * (100vh - 13rem));
             min-height: 500px;
             overflow-y: scroll;
@@ -91,7 +93,8 @@
                     background: rgba($color: #000, $alpha: 0.25);
                     border-left-width: 15px;
                 }
-                transition: border-left 250ms linear, background-color 250ms linear;
+                transition: border-left 250ms linear,
+                    background-color 250ms linear;
                 @media screen and (max-width: 520px) {
                     .music__column__item__title {
                         width: 100%;
@@ -106,31 +109,30 @@
                 }
             }
             &--recent {
-                height: calc(0.25* (100vh - (13.75rem + 14vw)));
+                height: calc(0.25 * (100vh - (13.75rem + 14vw)));
                 min-height: 200px;
             }
             &--totals {
-                height: calc(0.30 * (100vh - (13.75rem + 14vw)));
+                height: calc(0.3 * (100vh - (13.75rem + 14vw)));
                 min-height: 300px;
                 // border-bottom: 0
             }
         }
         &--recent {
-            grid-template-columns: 1fr ;
-
+            grid-template-columns: 1fr;
         }
     }
     @media screen and (prefers-color-scheme: dark) {
         .music__column__item {
-                    &--hovered {
-                    background: rgba($color: #fff, $alpha: 0.15);
-                    }
-                    &--selected {
-                        background: rgba($color: #fff, $alpha: 0.25);
-                        border-left-width: 15px;
-                    }
-                }
+            &--hovered {
+                background: rgba($color: #fff, $alpha: 0.15);
             }
+            &--selected {
+                background: rgba($color: #fff, $alpha: 0.25);
+                border-left-width: 15px;
+            }
+        }
+    }
 
     .dropdown--music {
         font-size: 1em;
@@ -157,4 +159,10 @@
     padding: calc(0.4 * (100vh - 13rem)) 0;
     border: 2px solid var(--text-color);
     height: calc(0.89 * (100vh - 13rem));
+}
+
+.music__column__item--recent {
+    .music__column__item__title {
+        width: 75%;
+    }
 }

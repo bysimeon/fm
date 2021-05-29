@@ -1,6 +1,4 @@
 import React, { Component } from "react"
-import "./styles.scss"
-
 class Track extends Component {
     render() {
         let classes = "music__column__item"

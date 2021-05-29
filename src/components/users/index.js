@@ -1,16 +1,7 @@
 import React, { Component } from "react"
+import { fetchFM } from "../../lastFM"
 
-const apikey = process.env.REACT_APP_LASTFM_API_KEY
-const apibase = "https://ws.audioscrobbler.com/2.0/"
-const user = "theblindlookout"
-const timespanConvert = {
-    "7": "7day",
-    "30": "1month",
-    "90": "3month",
-    "180": "6month",
-    "365": "12month",
-    "???": "overall"
-}
+const user = "dotdotdashdot"
 
 class Users extends Component {
     constructor() {
@@ -18,75 +9,59 @@ class Users extends Component {
         this.state = {
             user: "",
             friends: false,
-            added: []
+            added: [],
         }
     }
 
     addUser(username) {
         this.setState({
-            added: this.state.added.push(username)
+            added: this.state.added.push(username),
         })
     }
 
     currentTracks() {
-    if (this.state.friends) {
-        console.log(this.state.friends)
-        this.state.friends.forEach(friend => {
-            friend.recent = this.getJSON("getrecenttracks", friend.name, "1")
-        })
-    }
+        if (this.state.friends) {
+            console.log(this.state.friends)
+            this.state.friends.forEach((friend) => {
+                friend.recent = this.getJSON(
+                    "getrecenttracks",
+                    friend.name,
+                    "1"
+                )
+            })
+        }
     }
 
-    updateFriends(user, recent) {
-        
-    }
+    updateFriends(user, recent) { }
 
-    getJSON(request, user, limit) {
-        let xhr = new XMLHttpRequest()
-        xhr.open(
-            "GET",
-            apibase +
-            "?method=user." +
-            request +
-            "&user=" +
-            user +
-            "&api_key=" +
-            apikey +
-            "&limit=" + 
-            limit +
-            "&format=json" 
-        )
-        xhr.onload = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    switch (request) {
-                        case "getinfo":
-                            this.setState({
-                                userInfo: JSON.parse(xhr.responseText)
-                            })
-                            break
-                        case "getrecenttracks":
-                            this.updateFriends(user, JSON.parse(xhr.responseText))
-                            break
-                        case "getfriends":
-                            let raw = JSON.parse(xhr.responseText)
-                            let friends = []
-                            Object.entries(raw.friends).forEach(friend => {
-                                friends.push(friend[1][0])
-                            })
-                            friends.pop()
-                            this.setState({
-                                friends: friends
-                            })
-                            console.log(friends)
-                            break
-                        default:
-                            break
-                    }
-                }
+    async getJSON(request, user, limit = 50, page = 1) {
+        const response = await fetchFM(request, user, limit, page)
+
+        if (response) {
+            switch (request) {
+                case "getinfo":
+                    this.setState({
+                        userInfo: response,
+                    })
+                    break
+                case "getrecenttracks":
+                    this.updateFriends(user, response)
+                    break
+                case "getfriends":
+                    let raw = await response
+                    let friends = []
+                    Object.entries(raw.friends).forEach((friend) => {
+                        friends.push(friend[1][0])
+                    })
+                    friends.pop()
+                    this.setState({
+                        friends: friends,
+                    })
+                    break
+                default:
+                    break
             }
         }
-        xhr.send()
     }
 
     updateData() {
@@ -95,14 +70,17 @@ class Users extends Component {
     }
 
     componentWillMount() {
-        this.setState({
-            user: user
-        }, this.updateData())
+        this.setState(
+            {
+                user: user,
+            },
+            this.updateData()
+        )
         let recentInterval = setInterval(() => {
-           this.currentTracks()
+            this.currentTracks()
         }, 1000)
         this.setState({
-            setInterval: recentInterval
+            setInterval: recentInterval,
         })
     }
 
@@ -115,12 +93,12 @@ class Users extends Component {
                     topAlbums: this.props.topAlbums,
                     recentTracks: this.props.recentTracks,
                     userInfo: this.props.userInfo,
-                    timespan: this.props.timespan
+                    timespan: this.props.timespan,
                 })
             }
         }, 80)
         this.setState({
-            setInterval: recentInterval
+            setInterval: recentInterval,
         })
     }
 
@@ -136,11 +114,9 @@ class Users extends Component {
         let trackplays = 0
 
         return (
-           <section className="users">
-               <h1>
-                   {/* debug: {this.state.user} */}
-                 </h1>
-           </section>
+            <section className="users">
+                <h1>debug: {this.state.user}</h1>
+            </section>
         )
     }
 }
