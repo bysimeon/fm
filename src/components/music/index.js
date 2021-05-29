@@ -1,27 +1,18 @@
 import React, { Component } from "react"
+import { fetchFM } from "../../lastFM"
 import "./style.scss"
 
+import Users from "../users"
 import Artist from "./artists"
 import Album from "./albums"
 import Track from "./tracks"
 import Recent from "./recents"
 
-const apikey = process.env.REACT_APP_LASTFM_API_KEY
-const apibase = "https://ws.audioscrobbler.com/2.0/"
-const timespanConvert = {
-    "7": "7day",
-    "30": "1month",
-    "90": "3month",
-    "180": "6month",
-    "365": "12month",
-    "???": "overall"
-}
-
 class Music extends Component {
     constructor() {
         super()
         this.state = {
-            user: "dotdotdashdot",
+            user: "",
             limit: 50,
             timespan: "30",
             topArtists: null,
@@ -95,70 +86,56 @@ class Music extends Component {
     }
 
     async getJSON(request, time, limit = 50, page = 1) {
-        let xhr = new XMLHttpRequest()
-        xhr.open(
-            "GET",
-            apibase +
-            "?method=user." +
-            request +
-            "&user=" +
-            this.state.user +
-            "&period=" +
-            timespanConvert[time] +
-            "&limit=" +
-            limit +
-            "&api_key=" +
-            apikey +
-            "&format=json"
-        )
-        xhr.onload = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    switch (request) {
-                        case "gettopartists":
-                            this.setState({
-                                topArtists: JSON.parse(xhr.responseText)
-                            })
-                            break
-                        case "gettoptracks":
-                            this.setState({
-                                topTracks: JSON.parse(xhr.responseText)
-                            })
-                            break
-                        case "gettopalbums":
-                            this.setState({
-                                topAlbums: JSON.parse(xhr.responseText)
-                            })
-                            break
-                        case "getinfo":
-                            this.setState({
-                                userInfo: JSON.parse(xhr.responseText)
-                            })
-                            break
-                        case "getrecenttracks":
-                            this.setState({
-                                recentTracks: JSON.parse(xhr.responseText)
-                            })
-                            break
-                        default:
-                            break
-                    }
-                }
+        try {
+            let user = this.state.user
+            user = user.length > 0 ? user : "dotdotdashdot"
+            const response = await fetchFM(request, time, user, limit, page)
+            switch (request) {
+                case "gettopartists":
+                    this.setState({
+                        topArtists: response
+                    })
+                    break
+                case "gettoptracks":
+                    this.setState({
+                        topTracks: response
+                    })
+                    break
+                case "gettopalbums":
+                    this.setState({
+                        topAlbums: response
+                    })
+                    break
+                case "getinfo":
+                    this.setState({
+                        userInfo: response
+                    })
+                    break
+                case "getrecenttracks":
+                    this.setState({
+                        recentTracks: response
+                    })
+                    break
+                default:
+                    break
             }
         }
-        xhr.send()
+        catch (error) {
+            console.log(error)
+        }
     }
 
-    updateUser(e) {
+    updateUser(e, clear=false) {
+        if (clear) {
+
+        }
         let username = e.target.value
         if (username === "") {
-            username = "dotdotdashdot"
         }
         this.setState({
             user: username
-        })
-        let timer = 0
-        setTimeout(this.updateData, 10000)
+        }, this.updateData)
+        setTimeout(this.updateData, 1000)
     }
 
     updateData(time) {
@@ -166,7 +143,7 @@ class Music extends Component {
             time = this.state.timespan
         }
         this.getJSON("getinfo", time, "50")
-        this.getJSON("getrecenttracks", time, "1")
+        this.getJSON("getrecenttracks", time, "15")
         this.getJSON("gettopartists", time, "50")
         this.getJSON("gettoptracks", time, "50")
         this.getJSON("gettopalbums", time, "50")
@@ -176,7 +153,7 @@ class Music extends Component {
         this.updateData()
         let recentInterval = setInterval(() => {
             this.getJSON("getrecenttracks", "30", "50")
-        }, 1000)
+        }, 60000)
         this.setState({
             setInterval: recentInterval
         })
@@ -294,7 +271,8 @@ class Music extends Component {
 
         return (
             <div className="container container--music">
-                <input onKeyUp={this.updateUser} placeholder="site's creator" className="medmedtext medmedtext--music user-input" />
+                <Users user={this.state.user} changeUser={this.updateUser.bind(this)}/>
+                <input onChange={this.updateUser} value={this.state.user} placeholder="last.fm username" className="medmedtext medmedtext--music user-input" />
                 <p className="notsmalltext notsmalltext--music">
                     has listened to around{" "}
                     {this.state.userInfo ? (
@@ -307,7 +285,7 @@ class Music extends Component {
                         <span>000,000</span>
                     )}{" "}
                     songs, all tracked through{" "}
-                    {this.state.userInfo === false ? (
+                    {this.state.userInfo ? (
                         <span>
                             <a href={this.state.userInfo.user.url}> last.fm </a>
                         </span>

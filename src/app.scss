@@ -495,3 +495,17 @@ img {
         transform: translate3d(-100%, 0, 0);
     }
 }
+
+.users {
+  display: flex;
+  cursor: pointer;
+  &__user {
+    padding: .25em .5em;
+    margin: 0 .25em .25em 0;
+    border: var(--text-color) solid 2px;
+    transition: all 0.1s linear;
+    &:hover {
+      border-left-width: 15px;
+    }
+  }
+}

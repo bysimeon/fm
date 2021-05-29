@@ -13,13 +13,13 @@ function fetchFM(request, time = false, user, limit = 50, page = 1) {
     return new Promise(async (resolve, reject) => {
         time = time ? timespan[time] : false
 
-        const url = `${apibase}?method=user.${request}&user=${user}&api_key=${apikey}&limit=${limit}&format=json`
+        const url = `${apibase}?method=user.${request}&user=${user}&api_key=${apikey}&limit=${limit}&format=json${time ? '&period='+time : ''}`
         const response = await fetch(url)
 
         if (response.ok) {
             resolve(response.json())
         } else {
-            reject(response)
+            resolve(false)
         }
     })
 }

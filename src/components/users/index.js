@@ -1,42 +1,27 @@
 import React, { Component } from "react"
 import { fetchFM } from "../../lastFM"
 
-const user = "dotdotdashdot"
-
 class Users extends Component {
     constructor() {
         super()
         this.state = {
-            user: "",
             friends: false,
             added: [],
         }
     }
 
-    addUser(username) {
+    changeUser(username) {
+        let added = this.state.added
+        added.push(username)
+        this.props.changeUser({target: { value: username }})
         this.setState({
-            added: this.state.added.push(username),
-        })
+            user: username,
+            added: added,
+        }, this.updateData(username))
     }
-
-    currentTracks() {
-        if (this.state.friends) {
-            console.log(this.state.friends)
-            this.state.friends.forEach((friend) => {
-                friend.recent = this.getJSON(
-                    "getrecenttracks",
-                    friend.name,
-                    "1"
-                )
-            })
-        }
-    }
-
-    updateFriends(user, recent) { }
 
     async getJSON(request, user, limit = 50, page = 1) {
-        const response = await fetchFM(request, user, limit, page)
-
+        const response = await fetchFM(request, false, user, limit, page)
         if (response) {
             switch (request) {
                 case "getinfo":
@@ -50,13 +35,12 @@ class Users extends Component {
                 case "getfriends":
                     let raw = await response
                     let friends = []
-                    Object.entries(raw.friends).forEach((friend) => {
-                        friends.push(friend[1][0])
-                    })
-                    friends.pop()
+                    if (raw) {
+                    Object.entries(raw.friends.user).forEach((friend) => friends.push(friend[1]))
                     this.setState({
                         friends: friends,
                     })
+                    }
                     break
                 default:
                     break
@@ -64,39 +48,25 @@ class Users extends Component {
         }
     }
 
-    updateData() {
+    updateData(user) {
         this.getJSON("getinfo", user)
         this.getJSON("getfriends", user)
     }
 
     componentWillMount() {
         this.setState(
-            {
-                user: user,
-            },
-            this.updateData()
+            { user: "" },
+            this.updateData(this.state.user || "")
         )
-        let recentInterval = setInterval(() => {
-            this.currentTracks()
-        }, 1000)
-        this.setState({
-            setInterval: recentInterval,
-        })
     }
 
     componentDidMount() {
         let recentInterval = setInterval(() => {
-            if (this.props.topArtists) {
-                this.setState({
-                    topArtists: this.props.topArtists,
-                    topTracks: this.props.topTracks,
-                    topAlbums: this.props.topAlbums,
-                    recentTracks: this.props.recentTracks,
-                    userInfo: this.props.userInfo,
-                    timespan: this.props.timespan,
-                })
+            if (this.props.user !== this.state.user) {
+              this.updateData(this.props.user)
+              this.setState({user: this.props.user})
             }
-        }, 80)
+          }, 80)
         this.setState({
             setInterval: recentInterval,
         })
@@ -113,9 +83,13 @@ class Users extends Component {
         let recents = []
         let trackplays = 0
 
+        const friends = this.state.friends ? this.state.friends.map(friend => {
+          return <div className="users__user" onClick={() => this.changeUser(friend.name)}> {friend.name} </div>
+        }) : []
+
         return (
             <section className="users">
-                <h1>debug: {this.state.user}</h1>
+              {friends}
             </section>
         )
     }
